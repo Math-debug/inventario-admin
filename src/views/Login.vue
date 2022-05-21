@@ -5,23 +5,27 @@
     <div class="fadeIn first">
       <img src="../assets/logo.png" id="icon" alt="User Icon" />
     </div>
-    <v-form action="/log/painel" method="POST">
-      <input type="text" id="login" class="fadeIn second" name="email" placeholder="Usuário" required>
-      <input type="password" id="password" class="fadeIn third" name="senha" placeholder="Senha" required>
-      <input type="submit" class="fadeIn fourth" value="Entrar">
-    </v-form>
+    <div>
+      <input type="text" id="login" class="fadeIn second" name="username" placeholder="Usuário" required>
+      <input type="password" id="password" class="fadeIn third" name="password" placeholder="Senha" required>
+      <input type="submit" class="fadeIn fourth" value="Entrar" v-on:click="login">
+    </div>
   </div>
 </div>
 </template>
 
 <script>
 export default {
-  name: 'HelloWorld',
   data() {
     return{
-        msg:'Hello'
     }
   },
+  methods: {
+    login(){
+      console.log("Login")
+      window.location.replace('dashboard')
+    }
+  }
 }
 </script>
 
