@@ -2,13 +2,13 @@
   <div class="container mt-2">
     <div class="row">
       <div class="col-4">
-        <v-btn class="btn btn-success">Iniciar Inventario</v-btn>
+        <v-btn refs="newInventory" v-b-modal.modal-inventory class="btn btn-success">Iniciar Inventario</v-btn>
       </div>
       <div class="col-4">
-        <v-btn class="btn btn-warning">Nova Contagem</v-btn>
+        <v-btn refs="newCountig" v-b-modal.modal-counting class="btn btn-warning">Nova Contagem</v-btn>
       </div>
       <div class="col-4">
-        <v-btn class="btn btn-danger">Finalizar Inventario</v-btn>
+        <v-btn refs="finishInventory" v-b-modal.modal-finish class="btn btn-danger">Finalizar Inventario</v-btn>
       </div>
     </div>
     <div class="row mt-5">
@@ -25,18 +25,30 @@
       </b-progress>
     </div>
     <div class="row mt-5">
+      <div class="col-12 mt-5">
+        <h3 class="text-center">Progresso por Grupo de Produto (%)</h3>
+        <pieChart />
+      </div>
       <div class="col-12">
         <h3 class="text-center">Divergencias</h3>
         <v-card>
           <v-card-title>Bravecto (100111)</v-card-title>
           <v-card-text>Contagem 1: 10 unid</v-card-text>
-          <v-card-text>Contagem 2: 9 unid</v-card-text>  
-        </v-card>  
+          <v-card-text>Contagem 2: 9 unid</v-card-text>
+        </v-card>
       </div>
-      <div class="col-12 mt-5">
-        <h3 class="text-center">Progresso por Grupo de Produto (%)</h3>
-        <pieChart />
-      </div>
+    </div>
+    <b-modal id="modal-inventory" title="Novo Inventário" @ok="newInventory">
+      <p class="my-4">Confirma abertura de novo Inventário?</p>
+    </b-modal>
+    <b-modal id="modal-counting" title="Nova Contagem" @ok="newCounting">
+      <p class="my-4">Confirma abertura de novo Contagem?</p>
+    </b-modal>
+    <b-modal id="modal-finish" title="Finalizar Inventário" @ok="finishInventory">
+      <p class="my-4">Confirma finalização do inventário?</p>
+    </b-modal>
+    <div class="mb-5">
+
     </div>
   </div>
 </template>
@@ -60,7 +72,17 @@ export default {
       mini: true,
     };
   },
-  methods: {},
+  methods: {
+    newInventory(){
+      alert('gerar um novo inventario')
+    },
+    newCounting(){
+      alert('Gera nova contagem')
+    },
+    finishInventory(){
+      alert('Finaliza o inventario')
+    },
+  },
 };
 </script>
 

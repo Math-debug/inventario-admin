@@ -13,7 +13,12 @@
     <v-divider></v-divider>
 
     <v-list dense>
-      <v-list-item v-for="item in items" :key="item.title" link>
+      <v-list-item
+        v-for="item in items"
+        :key="item.title"
+        @click="$emit('select', item.action)"
+        link
+      >
         <v-list-item-icon>
           <v-icon>{{ item.icon }}</v-icon>
         </v-list-item-icon>
@@ -33,8 +38,31 @@ export default {
     return {
       drawer: true,
       items: [
-        { title: "Geral", icon: "mdi-home-city" },
-        { title: "Usuarios", icon: "mdi-account-group-outline" },
+        {
+          title: "Geral",
+          icon: "mdi-home-city",
+          action: null,
+        },
+        {
+          title: "Atribuir Endereço",
+          icon: "mdi-account-details-outline",
+          action: "counting",
+        },
+        {
+          title: "Usuarios",
+          icon: "mdi-account-group-outline",
+          action: "userDetail",
+        },
+        {
+          title: "Grupo de Produtos",
+          icon: "mdi-package",
+          action: "groupProduct",
+        },
+        {
+          title: "Produtos",
+          icon: "mdi-package-variant",
+          action: "productDetail",
+        },
       ],
       mini: false,
     };
