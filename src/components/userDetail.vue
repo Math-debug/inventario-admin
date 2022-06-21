@@ -28,21 +28,32 @@
         @click:append="show1 = !show1"
         :type="show1 ? 'text' : 'password'"
       ></v-text-field>
-      <v-select :items="grupoList" label="Grupo"></v-select>
+      <v-select :items="grupoList" item-value="value" item-text="label" label="Grupo"></v-select>
     </b-modal>
   </div>
 </template>
 
 <script>
+import userGroupService from "../service/userGroupService";
+import userService from "../service/userService";
+
 export default {
   components: {},
   name: "userDetail",
+  mounted() {
+    new userGroupService().getGroups().then((data) => {
+      this.groupList(data.data);
+    });
+    new userService().getUsers().then((data) => {
+      this.userList(data.data);
+    });
+  },
   data() {
     return {
       show1: false,
       password: "",
       search: "",
-      grupoList: ["admin", "operacao"],
+      grupoList: [],
       headers: [
         {
           text: "Usuarios",
@@ -50,19 +61,27 @@ export default {
         },
         { text: "Grupo", filterable: false, value: "grupo" },
       ],
-      desserts: [
-        {
-          usuario: "joao",
-          grupo: "admin",
-        },
-        {
-          usuario: "jose",
-          grupo: "operacao",
-        },
-      ],
+      desserts: [],
     };
   },
-  methods: {},
+  methods: {
+    groupList(list) {
+      for (let item in list) {
+        this.grupoList.push({
+          value: list[item].idUserGroup,
+          label: list[item].groupName
+          });
+      }
+    },
+    userList(list) {
+      for (let item in list) {
+        this.desserts.push({
+          usuario: list[item].userName,
+          grupo: list[item].userGroup.groupName
+          });
+      }
+    },
+  },
 };
 </script>
 
