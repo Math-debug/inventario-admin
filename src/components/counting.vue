@@ -26,7 +26,7 @@
     </div>
     <div class="row mt-3">
       <div class="col-6">
-        <b-card title="Endereços" class="mb-2 mt-2">
+        <b-card title="Endereços não atribuídos" class="mb-2 mt-2">
           <div v-for="address in addressList" :key="address.id">
             <v-checkbox :label="address.addressName"></v-checkbox>
           </div>

@@ -9,7 +9,11 @@
           single-line
           hide-details
         ></v-text-field>
-        <v-btn v-b-modal.modal-newUser class="col-2 btn btn-success">
+        <v-btn
+          v-b-modal.modal-newUser
+          class="col-2 btn btn-success"
+          @click="defaultUser"
+        >
           Adicionar
         </v-btn>
       </v-card-title>
@@ -19,16 +23,28 @@
         :search="search"
       ></v-data-table>
     </v-card>
-    <b-modal id="modal-newUser" title="Novo usuario">
-      <v-text-field label="Usuario"></v-text-field>
+    <b-modal
+      id="modal-newUser"
+      title="Novo usuario"
+      @ok="createUser"
+      @cancel="defaultUser"
+    >
+      <v-text-field label="Usuario" @input="setUserName"></v-text-field>
       <v-text-field
         label="Senha"
         v-model="password"
         :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
         @click:append="show1 = !show1"
         :type="show1 ? 'text' : 'password'"
+        @input="setPassword"
       ></v-text-field>
-      <v-select :items="grupoList" item-value="value" item-text="label" label="Grupo"></v-select>
+      <v-select
+        :items="grupoList"
+        item-value="value"
+        item-text="label"
+        @input="setGroup"
+        label="Grupo"
+      ></v-select>
     </b-modal>
   </div>
 </template>
@@ -41,16 +57,12 @@ export default {
   components: {},
   name: "userDetail",
   mounted() {
-    new userGroupService().getGroups().then((data) => {
-      this.groupList(data.data);
-    });
-    new userService().getUsers().then((data) => {
-      this.userList(data.data);
-    });
+  this.load();
   },
   data() {
     return {
       show1: false,
+      user: {},
       password: "",
       search: "",
       grupoList: [],
@@ -65,21 +77,54 @@ export default {
     };
   },
   methods: {
+    load() {
+      new userGroupService().getGroups().then((data) => {
+        this.grupoList = [];
+        this.groupList(data.data);
+      });
+      new userService().getUsers().then((data) => {
+        this.desserts= [];
+        this.userList(data.data);
+      });
+    },
     groupList(list) {
       for (let item in list) {
         this.grupoList.push({
           value: list[item].idUserGroup,
-          label: list[item].groupName
-          });
+          label: list[item].groupName,
+        });
       }
     },
     userList(list) {
       for (let item in list) {
         this.desserts.push({
           usuario: list[item].userName,
-          grupo: list[item].userGroup.groupName
-          });
+          grupo: list[item].userGroup.groupName,
+        });
       }
+    },
+    defaultUser() {
+      this.user = {
+        userName: null,
+        password: null,
+        userGroup: {
+          idUserGroup: null,
+        },
+      };
+    },
+    setUserName(event) {
+      this.user.userName = event;
+    },
+    setPassword(event) {
+      this.user.password = event;
+    },
+    setGroup(event) {
+      this.user.userGroup.idUserGroup = event;
+    },
+    createUser() {
+      new userService().createUser(this.user).then(() => {
+        this.load();
+      });
     },
   },
 };
