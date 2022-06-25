@@ -63,6 +63,11 @@ export default {
           icon: "mdi-package-variant",
           action: "productDetail",
         },
+        {
+          title: "Endereços",
+          icon: "mdi-clipboard-list",
+          action: "addressDetail",
+        },
       ],
       mini: false,
     };

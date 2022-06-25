@@ -3,7 +3,7 @@
     <v-card>
       <v-card-title>
         <v-text-field
-          class="col-10"
+          class="col-8"
           v-model="search"
           label="Search"
           single-line
@@ -11,6 +11,9 @@
         ></v-text-field>
         <v-btn v-b-modal.modal-newUser class="col-2 btn btn-success">
           Adicionar
+        </v-btn>
+        <v-btn v-b-modal.modal-productImport class="col-2 btn btn-warning">
+          Importar
         </v-btn>
       </v-card-title>
       <v-data-table
@@ -34,6 +37,14 @@
         @input="setGroup"
       ></v-select>
       <v-text-field label="Cod. Barras" @input="setCodebar"></v-text-field>
+    </b-modal>
+    <b-modal
+      id="modal-productImport"
+      title="Importar Produtos"
+      @cancel="defaultGroup"
+      @ok="submitForm"
+    >
+      <input type="file" ref="file" @change="onFileInput" />
     </b-modal>
   </div>
 </template>
@@ -62,6 +73,7 @@ export default {
           value: "produto",
         },
         { text: "Cod. barras", filterable: false, value: "codebar" },
+        { text: "Grupo de produto", filterable: false, value: "groupName" },
       ],
       desserts: [],
     };
@@ -90,6 +102,10 @@ export default {
         this.desserts.push({
           produto: list[item].productName,
           codebar: list[item].codebar,
+          groupName:
+            list[item].groupProduct != null
+              ? list[item].groupProduct.productGroupName
+              : null,
         });
       }
     },

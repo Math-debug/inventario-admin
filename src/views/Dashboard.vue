@@ -22,6 +22,9 @@
          <div v-else-if="tela == 'groupProduct'">
           <groupProduct/>
         </div>
+        <div v-else-if="tela == 'addressDetail'">
+          <addressDetail/>
+        </div>
       </div>
     </div>
   </div>
@@ -34,6 +37,7 @@ import counting from '../components/counting.vue'
 import userDetail from '../components/userDetail.vue'
 import productDetail from '../components/productDetail.vue'
 import groupProduct from '../components/groupProduct.vue'
+import addressDetail from '../components/addressDetail.vue'
 
 export default {
   name: "dashboard",
@@ -43,7 +47,8 @@ export default {
     counting,
     userDetail,
     productDetail,
-    groupProduct
+    groupProduct,
+    addressDetail
   },
   data() {
     return {
