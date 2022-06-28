@@ -37,6 +37,10 @@
         @input="setGroup"
       ></v-select>
       <v-text-field label="Cod. Barras" @input="setCodebar"></v-text-field>
+      <v-text-field label="Rua" @input="setStreet"></v-text-field>
+      <v-text-field label="Predio" @input="setBuilding"></v-text-field>
+      <v-text-field label="Nivel" @input="setLevel"></v-text-field>
+      <v-text-field label="Apartamento" @input="setApartment"></v-text-field>
     </b-modal>
     <b-modal
       id="modal-productImport"
@@ -52,6 +56,7 @@
 <script>
 import productService from "../service/productService";
 import productGroupService from "../service/productGroupService";
+import fileService from "../service/fileService";
 
 export default {
   components: {},
@@ -62,9 +67,20 @@ export default {
   data() {
     return {
       search: "",
+      file: "",
       product: {
         productName: null,
         codebar: null,
+        productAddress: [
+          {
+            address: {
+              street: null,
+              building: null,
+              level: null,
+              apartment: null,
+            },
+          },
+        ],
       },
       grupoList: [],
       headers: [
@@ -124,10 +140,44 @@ export default {
     setGroup(event) {
       this.product.groupProduct = { idGroupProduct: event };
     },
+    setStreet(value) {
+      this.product.productAddress[0].address.street = value;
+    },
+    setBuilding(value) {
+      this.product.productAddress[0].address.building = value;
+    },
+    setLevel(value) {
+      this.product.productAddress[0].address.level = value;
+    },
+    setApartment(value) {
+      this.product.productAddress[0].address.apartment = value;
+    },
     createProduct() {
-      new productService().createProduct(this.product).then(() => {
-        this.load();
-      });
+      new productService()
+        .createProduct(this.product)
+        .then(() => {
+          this.$swal("Sucesso", "Produto inserido com sucesso!", "success");
+          this.load();
+        })
+        .catch((e) => {
+          this.$swal("Opss...", "Erro: " + e, "error");
+        });
+    },
+    onFileInput() {
+      this.file = this.$refs.file.files[0];
+    },
+    submitForm() {
+      let formData = new FormData();
+      formData.append("arquivo", this.file);
+      new fileService()
+        .submit(formData, "product")
+        .then(() => {
+          this.$swal("Sucesso", "Produto inserido com sucesso!", "success");
+          this.load();
+        })
+        .catch((e) => {
+          this.$swal("Opss...", "Erro: " + e, "error");
+        });
     },
   },
 };

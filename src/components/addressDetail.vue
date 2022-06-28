@@ -123,7 +123,12 @@ export default {
       this.address.apartment = value;
     },
     createAddress(){
-      new addressService().createAddress(this.address).then(this.load)
+      new addressService().createAddress(this.address).then(()=> {
+      this.$swal("Sucesso", "Endereco inserido com sucesso!", "success");
+        this.load();
+      }).catch(e=>{
+        this.$swal("Opss...", "Erro: " +e, "error");
+      });
     },
     onFileInput() {
       this.file = this.$refs.file.files[0];
@@ -132,7 +137,10 @@ export default {
       let formData = new FormData();
       formData.append("arquivo", this.file);
       new fileService().submit(formData, "address").then(() => {
-        this.load()
+         this.$swal("Sucesso", "Endereco inserido com sucesso!", "success");
+        this.load();
+      }).catch(e=>{
+        this.$swal("Opss...", "Erro: " +e, "error");
       });
     },
   },

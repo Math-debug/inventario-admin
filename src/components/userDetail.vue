@@ -123,7 +123,10 @@ export default {
     },
     createUser() {
       new userService().createUser(this.user).then(() => {
+        this.$swal("Sucesso", "Usuario inserido com sucesso!", "success");
         this.load();
+      }).catch(e=>{
+        this.$swal("Opss...", "Erro: " +e, "error");
       });
     },
   },

@@ -73,8 +73,11 @@ export default {
     },
     createGroup(){
       new productGroupService().createProductGroup(this.groupProduct).then(()=>{
+        this.$swal("Sucesso", "Grupo inserido com sucesso!", "success");
         this.load();
-      })
+      }).catch(e=>{
+        this.$swal("Opss...", "Erro: " +e, "error");
+      });
     }
   },
 };
