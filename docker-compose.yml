@@ -7,7 +7,7 @@ services:
       dockerfile: Dockerfile
     container_name: inventario-portal
     restart: always
-    image: mxavier27/inventorty-portal:latest
+    image: mxavier27/inventorty-portal:prod
     hostname: inventario-portal.com.br  
     ports:
       - "8081:8081"
