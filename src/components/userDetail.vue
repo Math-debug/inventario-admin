@@ -5,7 +5,7 @@
         <v-text-field
           class="col-10"
           v-model="search"
-          label="Search"
+          label="Buscar"
           single-line
           hide-details
         ></v-text-field>
@@ -57,7 +57,7 @@ export default {
   components: {},
   name: "userDetail",
   mounted() {
-  this.load();
+    this.load();
   },
   data() {
     return {
@@ -83,7 +83,7 @@ export default {
         this.groupList(data.data);
       });
       new userService().getUsers().then((data) => {
-        this.desserts= [];
+        this.desserts = [];
         this.userList(data.data);
       });
     },
@@ -122,12 +122,27 @@ export default {
       this.user.userGroup.idUserGroup = event;
     },
     createUser() {
-      new userService().createUser(this.user).then(() => {
-        this.$swal("Sucesso", "Usuario inserido com sucesso!", "success");
-        this.load();
-      }).catch(e=>{
-        this.$swal("Opss...", "Erro: " +e, "error");
-      });
+      if (
+        this.user.userName == null ||
+        this.user.password == null ||
+        this.user.userGroup == null
+      ) {
+        this.$swal(
+          "Opss...",
+          "Erro: Por gentileza preencha todos os campos",
+          "error"
+        );
+      } else {
+        new userService()
+          .createUser(this.user)
+          .then(() => {
+            this.$swal("Sucesso", "Usuario inserido com sucesso!", "success");
+            this.load();
+          })
+          .catch((e) => {
+            this.$swal("Opss...", "Erro: " + e, "error");
+          });
+      }
     },
   },
 };

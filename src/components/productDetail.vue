@@ -5,7 +5,7 @@
         <v-text-field
           class="col-8"
           v-model="search"
-          label="Search"
+          label="Buscar"
           single-line
           hide-details
         ></v-text-field>
@@ -153,6 +153,21 @@ export default {
       this.product.productAddress[0].address.apartment = value;
     },
     createProduct() {
+            if (
+        this.product.productAddress[0].address.apartment == null ||
+        this.product.productAddress[0].address.street == null ||
+        this.product.productAddress[0].address.level == null ||
+        this.product.productAddress[0].address.building == null ||
+        this.product.productName == null ||
+        this.product.codebar == null ||
+        this.product.groupProduct == null
+      ) {
+        this.$swal(
+          "Opss...",
+          "Erro: Por gentileza preencha todos os campos",
+          "error"
+        );
+      } else {
       new productService()
         .createProduct(this.product)
         .then(() => {
@@ -162,6 +177,7 @@ export default {
         .catch((e) => {
           this.$swal("Opss...", "Erro: " + e, "error");
         });
+      }
     },
     onFileInput() {
       this.file = this.$refs.file.files[0];

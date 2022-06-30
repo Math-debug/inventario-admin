@@ -5,7 +5,7 @@
         <v-text-field
           class="col-8"
           v-model="search"
-          label="Search"
+          label="Buscar"
           single-line
           hide-details
         ></v-text-field>
@@ -122,13 +122,29 @@ export default {
     setApartment(value) {
       this.address.apartment = value;
     },
-    createAddress(){
-      new addressService().createAddress(this.address).then(()=> {
-      this.$swal("Sucesso", "Endereco inserido com sucesso!", "success");
-        this.load();
-      }).catch(e=>{
-        this.$swal("Opss...", "Erro: " +e, "error");
-      });
+    createAddress() {
+      if (
+        this.address.apartment == null ||
+        this.address.street == null ||
+        this.address.level == null ||
+        this.address.building == null
+      ) {
+        this.$swal(
+          "Opss...",
+          "Erro: Por gentileza preencha todos os campos",
+          "error"
+        );
+      } else {
+        new addressService()
+          .createAddress(this.address)
+          .then(() => {
+            this.$swal("Sucesso", "Endereco inserido com sucesso!", "success");
+            this.load();
+          })
+          .catch((e) => {
+            this.$swal("Opss...", "Erro: " + e, "error");
+          });
+      }
     },
     onFileInput() {
       this.file = this.$refs.file.files[0];
@@ -136,12 +152,15 @@ export default {
     submitForm() {
       let formData = new FormData();
       formData.append("arquivo", this.file);
-      new fileService().submit(formData, "address").then(() => {
-         this.$swal("Sucesso", "Endereco inserido com sucesso!", "success");
-        this.load();
-      }).catch(e=>{
-        this.$swal("Opss...", "Erro: " +e, "error");
-      });
+      new fileService()
+        .submit(formData, "address")
+        .then(() => {
+          this.$swal("Sucesso", "Endereco inserido com sucesso!", "success");
+          this.load();
+        })
+        .catch((e) => {
+          this.$swal("Opss...", "Erro: " + e, "error");
+        });
     },
   },
 };

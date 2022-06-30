@@ -5,7 +5,7 @@
         <v-text-field
           class="col-10"
           v-model="search"
-          label="Search"
+          label="Buscar"
           single-line
           hide-details
         ></v-text-field>
@@ -19,7 +19,12 @@
         :search="search"
       ></v-data-table>
     </v-card>
-    <b-modal id="modal-newUser" title="Novo Grupo" @cancel="defaultGroup" @ok="createGroup">
+    <b-modal
+      id="modal-newUser"
+      title="Novo Grupo"
+      @cancel="defaultGroup"
+      @ok="createGroup"
+    >
       <v-text-field label="Grupo de produtos" @input="setGroup"></v-text-field>
     </b-modal>
   </div>
@@ -37,8 +42,8 @@ export default {
   data() {
     return {
       search: "",
-      groupProduct:{
-        productGroupName: null
+      groupProduct: {
+        productGroupName: null,
       },
       headers: [
         {
@@ -63,22 +68,35 @@ export default {
         });
       }
     },
-    defaultGroup(){
-       this.groupProduct = {
-        productGroupName: null
+    defaultGroup() {
+      this.groupProduct = {
+        productGroupName: null,
+      };
+    },
+    setGroup(event) {
+      this.groupProduct.productGroupName = event;
+    },
+    createGroup() {
+      if (
+       this.groupProduct.productGroupName == null
+      ) {
+        this.$swal(
+          "Opss...",
+          "Erro: Por gentileza preencha todos os campos",
+          "error"
+        );
+      } else {
+        new productGroupService()
+          .createProductGroup(this.groupProduct)
+          .then(() => {
+            this.$swal("Sucesso", "Grupo inserido com sucesso!", "success");
+            this.load();
+          })
+          .catch((e) => {
+            this.$swal("Opss...", "Erro: " + e, "error");
+          });
       }
     },
-    setGroup(event){
-      this.groupProduct.productGroupName = event
-    },
-    createGroup(){
-      new productGroupService().createProductGroup(this.groupProduct).then(()=>{
-        this.$swal("Sucesso", "Grupo inserido com sucesso!", "success");
-        this.load();
-      }).catch(e=>{
-        this.$swal("Opss...", "Erro: " +e, "error");
-      });
-    }
   },
 };
 </script>
