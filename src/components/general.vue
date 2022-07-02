@@ -1,14 +1,23 @@
 <template>
   <div class="container mt-2">
     <div class="row">
-      <div class="col-4">
-        <v-btn refs="newInventory" v-b-modal.modal-inventory class="btn btn-success">Iniciar Inventario</v-btn>
-      </div>
-      <div class="col-4">
-        <v-btn refs="newCountig" v-b-modal.modal-counting class="btn btn-warning">Nova Contagem</v-btn>
-      </div>
-      <div class="col-4">
-        <v-btn refs="finishInventory" v-b-modal.modal-finish class="btn btn-danger">Finalizar Inventario</v-btn>
+      <div class="d-flex justify-content-around">
+        <div>
+          <v-btn
+            refs="newInventory"
+            v-b-modal.modal-inventory
+            class="btn btn-success"
+            >Iniciar Inventario</v-btn
+          >
+        </div>
+        <div>
+          <v-btn
+            refs="finishInventory"
+            v-b-modal.modal-finish
+            class="btn btn-danger"
+            >Finalizar Inventario</v-btn
+          >
+        </div>
       </div>
     </div>
     <div class="row mt-5">
@@ -41,15 +50,14 @@
     <b-modal id="modal-inventory" title="Novo Inventário" @ok="newInventory">
       <p class="my-4">Confirma abertura de novo Inventário?</p>
     </b-modal>
-    <b-modal id="modal-counting" title="Nova Contagem" @ok="newCounting">
-      <p class="my-4">Confirma abertura de novo Contagem?</p>
-    </b-modal>
-    <b-modal id="modal-finish" title="Finalizar Inventário" @ok="finishInventory">
+    <b-modal
+      id="modal-finish"
+      title="Finalizar Inventário"
+      @ok="finishInventory"
+    >
       <p class="my-4">Confirma finalização do inventário?</p>
     </b-modal>
-    <div class="mb-5">
-
-    </div>
+    <div class="mb-5"></div>
   </div>
 </template>
 
@@ -73,14 +81,14 @@ export default {
     };
   },
   methods: {
-    newInventory(){
-      alert('gerar um novo inventario')
+    newInventory() {
+      alert("gerar um novo inventario");
     },
-    newCounting(){
-      alert('Gera nova contagem')
+    newCounting() {
+      alert("Gera nova contagem");
     },
-    finishInventory(){
-      alert('Finaliza o inventario')
+    finishInventory() {
+      alert("Finaliza o inventario");
     },
   },
 };

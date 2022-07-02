@@ -6,24 +6,38 @@
       <img src="../assets/logo.png" id="icon" alt="User Icon" />
     </div>
     <div>
-      <input type="text" id="login" class="fadeIn second" name="username" placeholder="Usuário" required>
-      <input type="password" id="password" class="fadeIn third" name="password" placeholder="Senha" required>
+      <input type="text" ref="login" id="login" class="fadeIn second" name="username" placeholder="Usuário" required>
+      <input type="password" ref="password" id="password" class="fadeIn third" name="password" placeholder="Senha" required>
       <input type="submit" class="fadeIn fourth" value="Entrar" v-on:click="login">
+      <p style="color:red" v-show="failed">Falha no Login</p>
     </div>
   </div>
 </div>
 </template>
 
 <script>
+import UserService from '../service/userService'
 export default {
   data() {
     return{
+      failed: false
     }
   },
   methods: {
     login(){
-      console.log("Login")
-      window.location.replace('dashboard')
+      new UserService().login({
+        userName: this.$refs.login.value,
+        password: this.$refs.password.value
+      }).then(data =>{
+        let token = localStorage.token = data.headers.authorization
+        if(token != undefined){
+           window.location.replace('dashboard')
+        } else{
+          this.failed = true;
+        }
+      }).catch(()=>{
+        this.failed = true;
+      })
     }
   }
 }

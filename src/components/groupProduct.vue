@@ -32,12 +32,16 @@
 
 <script>
 import productGroupService from "../service/productGroupService";
+import UserService from "../service/userService";
 
 export default {
   components: {},
   name: "groupProduct",
   mounted() {
     this.load();
+     new UserService().getUsers().catch(()=>{
+      window.location.replace('/')
+    })
   },
   data() {
     return {

@@ -1,11 +1,25 @@
 <template>
   <div data-app class="container">
     <div class="row mt-3">
-      <div class="col-6">
-        <v-btn v-b-modal.modal-atribuir-contagem-aut class="btn btn-danger">Atribuir contagem Automatica</v-btn>
-      </div>
-      <div class="col-6">
-        <v-btn v-b-modal.modal-atribuir-contagem class="btn btn-warning">Atribuir contagem</v-btn>
+      <div class="d-flex justify-content-around">
+        <div>
+          <v-btn
+            refs="newCountig"
+            v-b-modal.modal-counting
+            class="btn btn-success"
+            >Nova Contagem</v-btn
+          >
+        </div>
+        <div>
+          <v-btn v-b-modal.modal-atribuir-contagem-aut class="btn btn-danger"
+            >Atribuir contagem Automatica</v-btn
+          >
+        </div>
+        <div>
+          <v-btn v-b-modal.modal-atribuir-contagem class="btn btn-warning"
+            >Atribuir contagem</v-btn
+          >
+        </div>
       </div>
     </div>
     <div class="row mt-3">
@@ -47,8 +61,11 @@
     <b-modal id="modal-atribuir-contagem" title="Atribuir contagem">
       <v-select :items="userList" label="Usuario"></v-select>
     </b-modal>
-     <b-modal id="modal-atribuir-contagem-aut" title="Atribuir contagem">
+    <b-modal id="modal-atribuir-contagem-aut" title="Atribuir contagem">
       <p>Deseja atribuir de forma Automatica a Contagem?</p>
+    </b-modal>
+    <b-modal id="modal-counting" title="Nova Contagem" @ok="newCounting">
+      <p class="my-4">Confirma abertura de novo Contagem?</p>
     </b-modal>
   </div>
 </template>
@@ -59,7 +76,7 @@ export default {
   name: "counting",
   data() {
     return {
-      userList:['Joao','Jose'],
+      userList: ["Joao", "Jose"],
       parametroList: ["Usuario", "Endereco"],
       contagemList: ["Contagem 1", "Contagem 2"],
       addressList: [

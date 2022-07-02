@@ -38,6 +38,7 @@ import userDetail from "../components/userDetail.vue";
 import productDetail from "../components/productDetail.vue";
 import groupProduct from "../components/groupProduct.vue";
 import addressDetail from "../components/addressDetail.vue";
+import UserService from "../service/userService";
 
 export default {
   name: "dashboard",
@@ -54,6 +55,11 @@ export default {
     return {
       tela: null,
     };
+  },
+  mounted() {
+    new UserService().getUsers().catch(()=>{
+      window.location.replace('/')
+    })
   },
   methods: {
     onOpenComponent: function (event) {

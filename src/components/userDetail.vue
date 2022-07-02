@@ -58,6 +58,9 @@ export default {
   name: "userDetail",
   mounted() {
     this.load();
+     new UserService().getUsers().catch(()=>{
+      window.location.replace('/')
+    })
   },
   data() {
     return {

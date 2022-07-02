@@ -47,12 +47,17 @@
 <script>
 import fileService from "../service/fileService";
 import addressService from "../service/addressService";
+import UserService from "../service/userService";
 
 export default {
   components: {},
   name: "addressProduct",
   mounted() {
     this.load();
+    new UserService().getUsers().catch(()=>{
+      window.location.replace('/')
+    })
+
   },
   data() {
     return {

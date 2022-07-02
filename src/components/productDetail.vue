@@ -57,12 +57,16 @@
 import productService from "../service/productService";
 import productGroupService from "../service/productGroupService";
 import fileService from "../service/fileService";
+import UserService from "../service/userService";
 
 export default {
   components: {},
   name: "productDetail",
   mounted() {
     this.load();
+     new UserService().getUsers().catch(()=>{
+      window.location.replace('/')
+    })
   },
   data() {
     return {
