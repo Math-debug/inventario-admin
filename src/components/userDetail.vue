@@ -58,9 +58,6 @@ export default {
   name: "userDetail",
   mounted() {
     this.load();
-     new UserService().getUsers().catch(()=>{
-      window.location.replace('/')
-    })
   },
   data() {
     return {
@@ -85,10 +82,13 @@ export default {
         this.grupoList = [];
         this.groupList(data.data);
       });
-      new userService().getUsers().then((data) => {
+      new userService().getAllUsers().then((data) => {
         this.desserts = [];
         this.userList(data.data);
       });
+      new userService().getUsers().catch(()=>{
+      window.location.replace('/')
+    })
     },
     groupList(list) {
       for (let item in list) {

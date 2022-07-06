@@ -57,9 +57,7 @@ export default {
     };
   },
   mounted() {
-    new UserService().getUsers().catch(()=>{
-      window.location.replace('/')
-    })
+    
   },
   methods: {
     onOpenComponent: function (event) {

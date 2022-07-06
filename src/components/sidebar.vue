@@ -9,7 +9,7 @@
           ></v-img>
         </v-list-item-avatar>
 
-        <v-list-item-title>Joao da Silva</v-list-item-title>
+        <v-list-item-title>{{user.userName}}</v-list-item-title>
       </v-list-item>
 
       <v-divider></v-divider>
@@ -35,6 +35,7 @@
 </template>
 
 <script>
+import userService from "../service/userService";
 export default {
   name: "sidebar",
   data() {
@@ -73,7 +74,19 @@ export default {
         },
       ],
       mini: false,
+      user:null
     };
+  },
+  mounted(){
+    new userService().getUsers().then(data=>{
+      if(!data.data.userGroup.admin){
+        window.location.replace('/')
+      }else{
+        this.user = data.data
+      }
+    }).catch(()=>{
+      window.location.replace('/')
+    })
   },
   methods: {},
 };
