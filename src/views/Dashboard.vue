@@ -7,10 +7,13 @@
       <div class="col-12">
         <div class="mb-2">
           <div v-if="tela == null">
-            <general />
+            <general
+              v-bind:clientsOnline="onlineClient"
+              v-bind:inventoryStatus="inventoryStatus"
+            />
           </div>
           <div v-else-if="tela == 'counting'">
-            <counting />
+            <counting v-bind:inventoryStatus="inventoryStatus" v-bind:onlineClient="onlineClient"/>
           </div>
           <div v-else-if="tela == 'userDetail'">
             <userDetail />
@@ -38,7 +41,9 @@ import userDetail from "../components/userDetail.vue";
 import productDetail from "../components/productDetail.vue";
 import groupProduct from "../components/groupProduct.vue";
 import addressDetail from "../components/addressDetail.vue";
-import UserService from "../service/userService";
+import socketF from "../plugins/socket";
+import userService from "../service/userService";
+import inventoryService from "../service/inventoryService";
 
 export default {
   name: "dashboard",
@@ -54,10 +59,38 @@ export default {
   data() {
     return {
       tela: null,
+      connected: false,
+      onlineClient: [],
+      inventoryStatus: null,
+      user: null,
     };
   },
-  mounted() {
-    
+  created() {
+    var socket = socketF();
+    socket.connect(
+      {},
+      (frame) => {
+        this.connected = true;
+        console.log(frame);
+        new userService().getUsers().then((data) => {
+          this.user = data.data;
+          socket.send("/app/users", {}, JSON.stringify(this.user));
+        });
+        socket.subscribe("/topic/users", (message) => {
+          this.onlineClient = JSON.parse(message.body);
+        });
+        socket.subscribe("/topic/inventoryStatus", (message) => {
+          this.inventoryStatus = JSON.parse(message.body);
+        });
+      },
+      (error) => {
+        console.log(error);
+        this.connected = false;
+      }
+    );
+    setTimeout(() => {
+      new inventoryService().status();
+    }, 2000);
   },
   methods: {
     onOpenComponent: function (event) {

@@ -7,16 +7,23 @@
             refs="newCountig"
             v-b-modal.modal-counting
             class="btn btn-success"
+            :disabled="!inventoryStatus"
             >Nova Contagem</v-btn
           >
         </div>
         <div>
-          <v-btn v-b-modal.modal-atribuir-contagem-aut class="btn btn-danger"
+          <v-btn
+            v-b-modal.modal-atribuir-contagem-aut
+            class="btn btn-danger"
+            :disabled="!inventoryStatus"
             >Atribuir contagem Automatica</v-btn
           >
         </div>
         <div>
-          <v-btn v-b-modal.modal-atribuir-contagem class="btn btn-warning"
+          <v-btn
+            v-b-modal.modal-atribuir-contagem
+            class="btn btn-warning"
+            :disabled="!inventoryStatus"
             >Atribuir contagem</v-btn
           >
         </div>
@@ -59,7 +66,8 @@
       </div>
     </div>
     <b-modal id="modal-atribuir-contagem" title="Atribuir contagem">
-      <v-select :items="userList" label="Usuario"></v-select>
+      <v-select :items="onlineClient" item-value="idUser"
+        item-text="userName" label="Usuario"></v-select>
     </b-modal>
     <b-modal id="modal-atribuir-contagem-aut" title="Atribuir contagem">
       <p>Deseja atribuir de forma Automatica a Contagem?</p>
@@ -71,12 +79,21 @@
 </template>
 
 <script>
+import inventoryService from "../service/inventoryService";
+import userService from "../service/userService";
+import countingService from "../service/countingService";
+
 export default {
+  props: {
+    inventoryStatus: Boolean,
+    onlineClient: Array,
+  },
   components: {},
   name: "counting",
   data() {
     return {
-      userList: ["Joao", "Jose"],
+      user: null,
+      inventory: null,
       parametroList: ["Usuario", "Endereco"],
       contagemList: ["Contagem 1", "Contagem 2"],
       addressList: [
@@ -103,7 +120,28 @@ export default {
       ],
     };
   },
-  methods: {},
+  mounted() {
+    this.load();
+  },
+  methods: {
+    load() {
+      new userService().getUsers().then((data) => {
+        this.user = data.data;
+      });
+      new inventoryService().lastInventory().then((data) => {
+        this.inventory = data.data;
+      });
+    },
+    newCounting() {
+      new countingService()
+        .createCounting({
+          inventory: {
+            idInventory: this.inventory.idInventory,
+          },
+        })
+        .then(this.inventoryStatusMethod);
+    },
+  },
 };
 </script>
 

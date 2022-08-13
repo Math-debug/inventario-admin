@@ -7,6 +7,7 @@
             refs="newInventory"
             v-b-modal.modal-inventory
             class="btn btn-success"
+            :disabled="inventoryStatus"
             >Iniciar Inventario</v-btn
           >
         </div>
@@ -15,10 +16,19 @@
             refs="finishInventory"
             v-b-modal.modal-finish
             class="btn btn-danger"
+            :disabled="!inventoryStatus"
             >Finalizar Inventario</v-btn
           >
         </div>
       </div>
+    </div>
+    <div class="row mt-5 mb-3">
+      <h3 class="text-center">Usuarios Online</h3>
+      <v-card>
+        <v-card-text v-for="client in clientsOnline" :key="client.idUser">
+          <v-icon>mdi-checkbox-marked-circle</v-icon>{{ client.userName }}</v-card-text
+        >
+      </v-card>
     </div>
     <div class="row mt-5">
       <h3 class="text-center">Progresso das Constagens</h3>
@@ -63,8 +73,14 @@
 
 <script>
 import pieChart from "./pieChart.vue";
+import inventoryService from "../service/inventoryService";
+import userService from "../service/userService";
 
 export default {
+  props: {
+    clientsOnline: Array,
+    inventoryStatus: Boolean
+  },
   components: {
     pieChart,
   },
@@ -78,17 +94,30 @@ export default {
         { title: "Users", icon: "mdi-account-group-outline" },
       ],
       mini: true,
+      user: null,
     };
+  },
+  mounted() {
+    new userService()
+      .getUsers()
+      .catch(() => {
+        window.location.replace("/");
+      })
+      .then((data) => {
+        this.user = data.data;
+      });
   },
   methods: {
     newInventory() {
-      alert("gerar um novo inventario");
-    },
-    newCounting() {
-      alert("Gera nova contagem");
+      new inventoryService()
+        .createInventory({
+          idUser: {
+            idUser: this.user.idUser,
+          },
+        })
     },
     finishInventory() {
-      alert("Finaliza o inventario");
+      new inventoryService().finishInventory()
     },
   },
 };
